@@ -1,105 +1,105 @@
 plugins {
-	id 'java'
-	id 'org.springframework.boot' version '2.7.7' apply(false)
-	id 'io.spring.dependency-management' version '1.0.15.RELEASE' apply(false)
-	id 'org.asciidoctor.jvm.convert' version '3.3.2' apply(false)
+    id 'java'
+    id 'org.springframework.boot' version '2.7.7' apply(false)
+    id 'io.spring.dependency-management' version '1.0.15.RELEASE' apply(false)
+    id 'org.asciidoctor.jvm.convert' version '3.3.2' apply(false)
 }
 
 allprojects {
-	group = 'com.ampersand'
-	version = '0.0.1-SNAPSHOT'
+    group = 'com.ampersand'
+    version = '0.0.1-SNAPSHOT'
 
-	repositories {
-		mavenCentral()
-	}
+    repositories {
+        mavenCentral()
+    }
 }
 
 ext {
-	set('snippetsDir', file("build/generated-snippets"))
+    set('snippetsDir', file("build/generated-snippets"))
 }
 
 subprojects {
-	apply plugin: 'java-library'
-	apply plugin: 'jacoco'
-	apply plugin: 'org.springframework.boot'
-	apply plugin: 'io.spring.dependency-management'
-	apply plugin: 'org.asciidoctor.jvm.convert'
+    apply plugin: 'java-library'
+    apply plugin: 'jacoco'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'org.asciidoctor.jvm.convert'
 
-	sourceCompatibility = '11'
+    sourceCompatibility = '11'
 
-	configurations {
-		compileOnly {
-			extendsFrom annotationProcessor
-		}
-	}
+    configurations {
+        compileOnly {
+            extendsFrom annotationProcessor
+        }
+    }
 
-	dependencies {
-		compileOnly 'org.projectlombok:lombok'
-		annotationProcessor 'org.projectlombok:lombok'
-		testCompileOnly 'org.projectlombok:lombok'
-		testAnnotationProcessor 'org.projectlombok:lombok'
+    dependencies {
+        compileOnly 'org.projectlombok:lombok'
+        annotationProcessor 'org.projectlombok:lombok'
+        testCompileOnly 'org.projectlombok:lombok'
+        testAnnotationProcessor 'org.projectlombok:lombok'
 
-		testImplementation 'org.springframework.boot:spring-boot-starter-test'
-		testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
-	}
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+        testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+    }
 
-	test {
-		outputs.dir snippetsDir
-		useJUnitPlatform()
-		finalizedBy 'jacocoTestReport'
-	}
+    test {
+        outputs.dir snippetsDir
+        useJUnitPlatform()
+        finalizedBy 'jacocoTestReport'
+    }
 
-	jacocoTestReport {
-		reports {
-			html.enabled true
-			xml.enabled true
-			csv.enabled false
-		}
+    jacocoTestReport {
+        reports {
+            html.enabled true
+            xml.enabled true
+            csv.enabled false
+        }
 
-		excludedClassFilesForReport(classDirectories)
-		finalizedBy 'jacocoTestCoverageVerification'
-	}
+        excludedClassFilesForReport(classDirectories)
+        finalizedBy 'jacocoTestCoverageVerification'
+    }
 
-	jacocoTestCoverageVerification {
-		excludedClassFilesForReport(classDirectories)
-		violationRules {
-			rule {
-				limit {
-					counter = 'LINE'
-					value = 'COVEREDRATIO'
-					minimum = 0.80
-				}
-			}
-		}
-	}
+    jacocoTestCoverageVerification {
+        excludedClassFilesForReport(classDirectories)
+        violationRules {
+            rule {
+                limit {
+                    counter = 'LINE'
+                    value = 'COVEREDRATIO'
+                    minimum = 0.80
+                }
+            }
+        }
+    }
 
-	tasks.named('asciidoctor') {
-		inputs.dir snippetsDir
-		dependsOn test
-	}
+    tasks.named('asciidoctor') {
+        inputs.dir snippetsDir
+        dependsOn test
+    }
 
-	tasks.named('bootJar') {
-		enabled = false
-	}
+    tasks.named('bootJar') {
+        enabled = false
+    }
 
-	tasks.named('jar') {
-		enabled = true
-	}
+    tasks.named('jar') {
+        enabled = true
+    }
 }
 
 private excludedClassFilesForReport(classDirectories) {
-	classDirectories.setFrom(
-			files(classDirectories.files.collect {
-				fileTree(dir: it, exclude: [
-						"**/*Application*",
-						"**/*Config*",
-						"**/*Request*",
-						"**/*Response*",
-						"**/*Exception*",
-						"**/*ExceptionHandler*",
-						"**/*Event*",
-						"**/commons/**"
-				])
-			})
-	)
+    classDirectories.setFrom(
+            files(classDirectories.files.collect {
+                fileTree(dir: it, exclude: [
+                        "**/*Application*",
+                        "**/*Config*",
+                        "**/*Request*",
+                        "**/*Response*",
+                        "**/*Exception*",
+                        "**/*ExceptionHandler*",
+                        "**/*Event*",
+                        "**/commons/**"
+                ])
+            })
+    )
 }
