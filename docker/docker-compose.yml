@@ -1,0 +1,35 @@
+version: "3.9"
+
+services:
+  local-db:
+    image: mysql:8.0.30
+    platform: linux/x86_64
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: AMPERSAND_DB
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      TZ: Asia/Seoul
+    volumes:
+      - ./mysql/data:/var/lib/mysql
+      - ./mysql/config:/etc/mysql/conf.d
+      - ./mysql/init:/docker-entrypoint-initdb.d
+
+  localstack:
+    image: localstack/localstack
+    environment:
+      - SERVICES=s3
+      - DEFAULT_REGION=ap-northeast-2
+      - HOSTNAME=localhost
+      - DATA_DIR=/tmp/localstack/data
+      - AWS_ACCESS_KEY_ID=ampersand
+      - AWS_SECRET_ACCESS_KEY=ampersand
+    ports:
+      - '4566:4566'
+    volumes:
+      - ./localstack-init:/docker-entrypoint-initaws.d
+      - ./data:/tmp/localstack/data
+      - /var/run/docker.sock:/var/run/docker.sock
