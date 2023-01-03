@@ -1,4 +1,5 @@
 version: "3.9"
+
 services:
   local-db:
     image: mysql:8.0.30
@@ -16,3 +17,19 @@ services:
       - ./mysql/data:/var/lib/mysql
       - ./mysql/config:/etc/mysql/conf.d
       - ./mysql/init:/docker-entrypoint-initdb.d
+
+  localstack:
+    image: localstack/localstack
+    environment:
+      - SERVICES=s3
+      - DEFAULT_REGION=ap-northeast-2
+      - HOSTNAME=localhost
+      - DATA_DIR=/tmp/localstack/data
+      - AWS_ACCESS_KEY_ID=ampersand
+      - AWS_SECRET_ACCESS_KEY=ampersand
+    ports:
+      - '4566:4566'
+    volumes:
+      - ./localstack-init:/docker-entrypoint-initaws.d
+      - ./data:/tmp/localstack/data
+      - /var/run/docker.sock:/var/run/docker.sock
