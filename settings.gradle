@@ -1,4 +1,5 @@
 rootProject.name = 'ampersand-server'
 
+include 'ampersand-clients:ampersand-file-storage-client'
 include 'ampersand-domain'
 include 'ampersand-external-api'
