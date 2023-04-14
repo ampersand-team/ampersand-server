@@ -1,1 +1,14 @@
+pluginManagement {
+    plugins {
+        id 'org.springframework.boot' version "${springBootVersion}"
+        id 'io.spring.dependency-management' version "${springDependencyManagementVersion}"
+        id 'com.ewerk.gradle.plugins.querydsl' version "${queryDslPluginVersion}"
+        id 'org.asciidoctor.jvm.convert' version "${asciidoctorConvertVersion}"
+        id 'com.diffplug.spotless' version "${spotlessVersion}"
+    }
+}
+
 rootProject.name = 'ampersand-server'
+
+include 'ampersand-api'
+include 'ampersand-domain'

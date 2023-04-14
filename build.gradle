@@ -1,51 +1,57 @@
 plugins {
-	id 'java'
-	id 'org.springframework.boot' version '2.7.7'
-	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
-	id 'org.asciidoctor.convert' version '1.5.8'
+	id 'java-library'
+	id 'org.springframework.boot' apply(false)
+	id 'io.spring.dependency-management'
+	id 'com.diffplug.spotless' apply(false)
 }
 
-group = 'com.ampersand'
-version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
+apply from: 'lint.gradle'
 
-configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
+allprojects {
+	group = "${projectGroup}"
+	version = "${applicationVersion}"
+	sourceCompatibility = project.javaVersion
+
+	repositories {
+		mavenCentral()
 	}
-}
-
-repositories {
-	mavenCentral()
 }
 
 ext {
 	set('snippetsDir', file("build/generated-snippets"))
 }
 
-dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-	implementation 'org.springframework.boot:spring-boot-starter-security'
-	implementation 'org.springframework.boot:spring-boot-starter-validation'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.flywaydb:flyway-core'
-	implementation 'org.flywaydb:flyway-mysql'
-	compileOnly 'org.projectlombok:lombok'
-	runtimeOnly 'com.h2database:h2'
-	runtimeOnly 'com.mysql:mysql-connector-j'
-	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
-	testImplementation 'org.springframework.security:spring-security-test'
-}
+subprojects {
+	apply plugin: 'java-library'
+	apply plugin: 'org.springframework.boot'
+	apply plugin: 'io.spring.dependency-management'
 
-tasks.named('test') {
-	outputs.dir snippetsDir
-	useJUnitPlatform()
-}
+	configurations {
+		compileOnly {
+			extendsFrom annotationProcessor
+		}
+	}
 
-tasks.named('asciidoctor') {
-	inputs.dir snippetsDir
-	dependsOn test
+	dependencies {
+		compileOnly 'org.projectlombok:lombok'
+		annotationProcessor 'org.projectlombok:lombok'
+		testCompileOnly 'org.projectlombok:lombok'
+		testAnnotationProcessor 'org.projectlombok:lombok'
+
+		testImplementation 'org.springframework.boot:spring-boot-starter-test'
+		testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+	}
+
+	test {
+		outputs.dir snippetsDir
+		useJUnitPlatform()
+	}
+
+	tasks.named('bootJar') {
+		enabled = false
+	}
+
+	tasks.named('jar') {
+		enabled = true
+	}
 }
