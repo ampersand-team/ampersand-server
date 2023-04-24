@@ -39,3 +39,6 @@ out/
 ### User setting ###
 .env
 .DS_Store
+
+### docker ###
+docker/mysql/data
