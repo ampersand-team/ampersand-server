@@ -1,5 +1,6 @@
 plugins {
     id 'java-library'
+    id 'jacoco'
     id 'org.springframework.boot' apply(false)
     id 'io.spring.dependency-management'
     id 'com.diffplug.spotless' apply(false)
@@ -23,6 +24,7 @@ ext {
 
 subprojects {
     apply plugin: 'java-library'
+    apply plugin: 'jacoco'
     apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
 
@@ -45,6 +47,31 @@ subprojects {
     test {
         outputs.dir snippetsDir
         useJUnitPlatform()
+        finalizedBy 'jacocoTestReport'
+    }
+
+    jacocoTestReport {
+        reports {
+            html.enabled true
+            xml.enabled true
+            csv.enabled false
+        }
+
+        excludedClassFilesForReport(classDirectories)
+        finalizedBy 'jacocoTestCoverageVerification'
+    }
+
+    jacocoTestCoverageVerification {
+        excludedClassFilesForReport(classDirectories)
+        violationRules {
+            rule {
+                limit {
+                    counter = 'LINE'
+                    value = 'COVEREDRATIO'
+                    minimum = 0.80
+                }
+            }
+        }
     }
 
     tasks.named('bootJar') {
@@ -54,4 +81,22 @@ subprojects {
     tasks.named('jar') {
         enabled = true
     }
+}
+
+private excludedClassFilesForReport(classDirectories) {
+    classDirectories.setFrom(
+            files(classDirectories.files.collect {
+                fileTree(dir: it, exclude: [
+                        "**/*Application*",
+                        "**/*Config*",
+                        "**/*Request*",
+                        "**/*Response*",
+                        "**/*Exception*",
+                        "**/*ExceptionHandler*",
+                        "**/*Event*",
+                        "**/commons/**",
+                        "**/Q*"
+                ])
+            })
+    )
 }
