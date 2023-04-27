@@ -11,4 +11,5 @@ pluginManagement {
 rootProject.name = 'ampersand-server'
 
 include 'ampersand-api'
+include 'ampersand-common'
 include 'ampersand-domain'
