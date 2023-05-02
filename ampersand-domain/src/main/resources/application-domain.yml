@@ -1,0 +1,40 @@
+spring:
+  config:
+    import: application-datasource.yml
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+
+  flyway:
+    enabled: false
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local, test
+
+  jpa:
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: create-drop
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local-dev, dev, prod
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+
+  flyway:
+    baselineOnMigrate: true
+    enabled: true
+    baseline-version: 0

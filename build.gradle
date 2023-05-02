@@ -91,6 +91,7 @@ private excludedClassFilesForReport(classDirectories) {
                         "**/*Config*",
                         "**/*Request*",
                         "**/*Response*",
+                        "**/*ErrorCode*",
                         "**/*Exception*",
                         "**/*ExceptionHandler*",
                         "**/*Event*",
