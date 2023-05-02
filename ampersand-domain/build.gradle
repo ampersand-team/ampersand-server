@@ -3,8 +3,11 @@ plugins {
 }
 
 dependencies {
+    // common
+    implementation project(':ampersand-common')
+
     // jpa
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    api 'org.springframework.boot:spring-boot-starter-data-jpa'
 
     // queryDsl
     implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
