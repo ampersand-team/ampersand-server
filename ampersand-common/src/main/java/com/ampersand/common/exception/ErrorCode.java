@@ -1,7 +1,7 @@
 package com.ampersand.common.exception;
 
 public interface ErrorCode {
-    String code();
+    String getCode();
 
-    String message();
+    String getMessage();
 }
