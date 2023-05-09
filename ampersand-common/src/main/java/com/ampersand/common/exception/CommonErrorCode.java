@@ -1,5 +1,10 @@
 package com.ampersand.common.exception;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@Getter
+@RequiredArgsConstructor
 public enum CommonErrorCode implements ErrorCode {
     PERMISSION_DENIED("PERMISSION_DENIED", "permission denied"),
 
@@ -10,19 +15,4 @@ public enum CommonErrorCode implements ErrorCode {
     private final String code;
 
     private final String message;
-
-    CommonErrorCode(String code, String message) {
-        this.code = code;
-        this.message = message;
-    }
-
-    @Override
-    public String code() {
-        return code;
-    }
-
-    @Override
-    public String message() {
-        return message;
-    }
 }

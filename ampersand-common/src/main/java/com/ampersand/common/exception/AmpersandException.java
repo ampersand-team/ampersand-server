@@ -9,11 +9,11 @@ public class AmpersandException extends RuntimeException {
     private final String message;
 
     public AmpersandException(ErrorCode errorCode) {
-        this(errorCode.code(), errorCode.message());
+        this(errorCode.getCode(), errorCode.getMessage());
     }
 
     public AmpersandException(ErrorCode errorCode, String message) {
-        this(errorCode.code(), message);
+        this(errorCode.getCode(), message);
     }
 
     public AmpersandException(String code, String message) {
@@ -21,11 +21,11 @@ public class AmpersandException extends RuntimeException {
     }
 
     public AmpersandException(Throwable throwable, ErrorCode errorCode) {
-        this(throwable, errorCode.code(), errorCode.message());
+        this(throwable, errorCode.getCode(), errorCode.getMessage());
     }
 
     public AmpersandException(Throwable throwable, ErrorCode errorCode, String message) {
-        this(throwable, errorCode.code(), message);
+        this(throwable, errorCode.getCode(), message);
     }
 
     public AmpersandException(Throwable cause, String code, String message) {
